@@ -4,7 +4,7 @@ services:
     image: eqalpha/keydb
     command: >
       bash -c "sed -i 's/^[\#\ ]*appendonly.*/appendonly yes/g' /etc/keydb/keydb.conf
-      && exec keydb-server /etc/keydb/keydb.conf --server-threads 3 --requirepass \"$${KEYDB_PASSWORD}\""
+      && exec keydb-server /etc/keydb/keydb.conf --server-threads 2 --requirepass \"$${KEYDB_PASSWORD}\""
     volumes:
       - keydb-data:/data
     ports:

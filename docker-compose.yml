@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  keydb:
+    image: eqalpha/keydb
+    command: >
+      bash -c "sed -i 's/^[\#\ ]*appendonly.*/appendonly yes/g' /etc/keydb/keydb.conf
+      && exec keydb-server /etc/keydb/keydb.conf --server-threads 3 --requirepass \"$${KEYDB_PASSWORD}\""
+    volumes:
+      - keydb-data:/data
+    ports:
+      - '${KEYDB_BIND_HOST:-0.0.0.0}:${KEYDB_BIND_PORT:-6379}:6379'
+    environment:
+      KEYDB_PASSWORD: '${KEYDB_PASSWORD}'
+    deploy:
+      restart_policy:
+        condition: always
+        delay: 5s
+      resources:
+        limits:
+          memory: ${DATABASE_MEMORY_LIMIT_MB:-512}M
+
+volumes:
+  keydb-data:
+    driver: local
